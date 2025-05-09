@@ -1,0 +1,25 @@
+---
+- name: Read detections CSV
+  community.general.read_csv:
+    path: "../meta.detections.csv"
+    key: "id"
+  register: detections_csv
+
+- name: Set fact for contentctl path
+  ansible.builtin.set_fact:
+    contentctl_path: "contentctl" # Adjust this to the actual path of contentctl
+
+- name: Run contentctl new detection
+  ansible.builtin.command:
+    cmd: "{{ contentctl_path }} new detection -n {{ item.value.name | lower | replace(' ', '_') }}"
+    loop: "{{ detections_csv.dict | dict2items }}"
+    when: item.value.status in ['production', 'test', 'development']
+    register: contentctl_output
+  args:
+    chdir: "content"
+
+- name: Display contentctl output
+  ansible.builtin.debug:
+    msg: "{{ item.value }}"
+    loop: "{{ detections_csv.dict | dict2items }}"
+    when: item.value.status in ['production', 'test', 'development']

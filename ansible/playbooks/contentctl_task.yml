@@ -1,0 +1,7 @@
+---
+- name: Trigger contentctl new detection
+  hosts: localhost
+  connection: local # Ensure we are using local connection
+  gather_facts: false
+  roles:
+    - ../roles/contentctl_wrapper

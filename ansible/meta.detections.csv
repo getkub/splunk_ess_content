@@ -1,0 +1,4 @@
+id,name,severity,status
+DET-1,Potential Account Takeover,High,production
+DET-2,Suspicious Process Execution,Medium,test
+DET-3,Brute Force Attack,Low,development
